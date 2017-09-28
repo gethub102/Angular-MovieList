@@ -615,4 +615,40 @@ constructor(
 </select>
 ```
 
-25. 
+25. The Opaque Token
+```
+// 1. create a provider.ts file
+
+import { OpaqueToken } from "@angular/core";
+
+export const lookupListToken = new OpaqueToken('lookupListToken');
+
+export const lookupList = {
+  mediums: ['Movies', 'Series']
+};
+```
+
+```
+// 2. import token
+import { lookupList, lookupListToken } from "./provider";
+
+// 3. register provider in @NgModule
+ providers: [
+  MediaItemService,
+  { provide: lookupListToken, useValue: lookupList }
+],
+```
+
+```
+// 4. in Component file import token obj
+import { lookupListToken } from "./provider";
+
+// 5. register op token in Component's constructor
+constructor(
+  private formBuilder: FormBuilder,
+  private mediaItemService: MediaItemService,
+  @Inject(lookupListToken) public lookupList
+) {}
+
+// 6. use it in the template file .....
+```
