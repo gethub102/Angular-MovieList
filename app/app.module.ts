@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core"; 
 import { BrowserModule } from "@angular/platform-browser";
-import { FormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from "./component.app";
 import { MediaItemComponent } from "./component.media-item";
@@ -12,7 +12,7 @@ import { MediaItemForm } from "./component.media-item-form";
 @NgModule({
   imports: [
     BrowserModule,
-    FormsModule
+    ReactiveFormsModule
   ],
   declarations: [
     AppComponent, MediaItemComponent, MediaItemList, 

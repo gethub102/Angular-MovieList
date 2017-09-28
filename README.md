@@ -361,3 +361,120 @@ onSubmit() method is to show data object of form
 - Field validation rules
 - Change tracking
 - Can be unit tested
+```
+<!-- app.module file, import ReactiveFormModule -->
+import { NgModule } from "@angular/core"; 
+import { BrowserModule } from "@angular/platform-browser";
+import { ReactiveFormsModule } from "@angular/forms";
+
+import { AppComponent } from "./component.app";
+import { MediaItemComponent } from "./component.media-item";
+import { MediaItemList } from "./component.media-item-list";
+import { FavoriteDirective } from "./favorite.directive";
+import { CategoryPipeList } from "./pipe.category-list";
+import { MediaItemForm } from "./component.media-item-form";
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule
+  ],
+  declarations: [
+    AppComponent, MediaItemComponent, MediaItemList, 
+    FavoriteDirective,
+    CategoryPipeList,
+    MediaItemForm
+  ],
+  bootstrap: [
+    AppComponent
+  ]
+})
+export class AppModule {}
+```
+```
+<!-- component.ts file import FormGroup & FormControl -->
+import { Component } from "@angular/core";
+import { FormGroup, FormControl } from "@angular/forms";
+
+@Component({
+  selector: 'media-item-form',
+  templateUrl: 'partials/media-item-form.html',
+  styleUrls: ['css/media-item-form.css']
+})
+export class MediaItemForm {
+  form;
+
+  ngOnInit() {
+    this.form = new FormGroup({
+      medium: new FormControl('Movies'),
+      name: new FormControl(''),
+      category: new FormControl(''),
+      year: new FormControl(''),
+    });
+  }
+
+  onSubmit(mediaItemFormValue) {
+    console.log(mediaItemFormValue);
+  }
+}
+```
+**Note**: `medium: new FormControl('Movies'),`this default value shoule match option value in select form
+```
+<!-- template html file -->
+<form 
+[formGroup]="form"
+(ngSubmit)="onSubmit(form.value)">
+  <ul>
+    <li>
+      <label for="medium">Medium</label>
+      <select name="medium" id="medium" formControlName="medium">
+        <option value="Movies">Movies</option>
+        <option value="Series">Series</option>
+      </select>
+    </li>
+    <li>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" formControlName="name">
+    </li>
+    <li>
+      <label for="category">Category</label>
+      <select name="category" id="category" formControlName="category">
+        <option value="Action">Action</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Drama">Drama</option>
+        <option value="Horror">Horror</option>
+        <option value="Romance">Romance</option>
+      </select>
+    </li>
+    <li>
+      <label for="year">Year</label>
+      <input type="text" name="year" id="year" maxlength="4" formControlName="year">
+    </li>
+  </ul>
+  <button type="submit">Save</button>
+</form>
+```
+`<form  [formGroup]="form" (ngSubmit)="onSubmit(form.value)">` and `<input type="text" name="year" id="year" maxlength="4" formControlName="year">` is used.
+
+20. Validation: build in
+```
+ngOnInit() {
+    this.form = new FormGroup({
+      medium: new FormControl('Movies'),
+      name: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('[\\w\\-\\s\\/]+')
+      ])),
+      category: new FormControl(''),
+      year: new FormControl(''),
+    });
+  }
+```
+
+```
+<!-- html form to disable invalidation form -->
+<button type="submit" [disabled]="!form.valid">Save</button>
+```
+
+21. Validaion: custom
