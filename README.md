@@ -26,7 +26,7 @@ Topics include:
 
 2. Clone this repository into your local machine using the terminal (mac) or Gitbash (PC) 
 
-    `git clone https://github.com/LyndaExerciseFiles/angular2-essential-training.git`
+    `git clone https://github.com/gethub102/Angular-MovieList.git`
     
 3. CD to the folder
 
@@ -51,12 +51,29 @@ You will want to use `npm start` for this project.*
 ### Common Modules
 1. NgModule
  - An NgModule is a class decorated with @NgModule metadata
- - Usually usage: `@NgModule({
+ - Usually usage: 
+ ```
+// app.component.ts
+import { NgModule } from "@angular/core"; 
+import { BrowserModule } from "@angular/platform-browser";
+import { AppComponent } from "./component.app";
+ @NgModule({
     imports:      [ BrowserModule ],
     declarations: [ AppComponent ],
     bootstrap:    [ AppComponent ]
-    })`
- - export root class `AppModule`
+})
+export class AppModule {}
+```
+```
+// main.ts 
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from "./app.module";
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+```
+
+ - then build custom Component
+
 2. BrowserModule
  - Mainly for browser DOM, Pipeline
 
@@ -478,3 +495,73 @@ ngOnInit() {
 ```
 
 21. Validaion: custom
+```
+yearValidator(control) {
+    if (control.value.trim().length === 0) {
+      return null;
+    }
+    let year = parseInt(control.value);
+    let min = 1900;
+    let max = 2100;
+    if (year >= min && year <= max) {
+      return null;
+    } else {
+      return {'year': true};
+    }
+  }
+```
+
+```
+ngOnInit() {
+    this.form = new FormGroup({
+      medium: new FormControl('Movies'),
+      name: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('[\\w\\-\\s\\/]+')
+      ])),
+      category: new FormControl(''),
+      year: new FormControl('', this.yearValidator),
+    });
+  }
+```
+**Note**: 
+- return null when valid, return an object if invalid.
+- FormControl is going to call whatever we hand it as the second argument when it runs invalid check.
+
+22. Error Handling
+  ```
+  <div *ngIf="form.controls.name.errors" class="error">
+    Name is invalid
+  </div>
+  ```
+  ```
+  <div *ngIf="form.controls.name.errors?.pattern" class="error">
+    Name has invalid characters
+  </div>
+  // '?' is safe navigator operator which is template expression operator. It tells Agular expression parser, stop here if property before this operator is NULL.
+  ```
+  ```
+  <div *ngIf="form.controls.year.errors?.year" class="error">
+    year must be between {{form.controls.year.errors?.year.min}} and {{form.controls.year.errors?.year.max}}.
+  </div>
+
+  //-----ts file-----//
+  yearValidator(control) {
+    if (control.value.trim().length === 0) {
+      return null;
+    }
+    let year = parseInt(control.value);
+    let minYear = 1800;
+    let maxYear = 2100;
+    if (year >= minYear && year <= maxYear) {
+      return null;
+    } else {
+      return {'year': {
+        min: minYear,
+        max: maxYear
+      }};
+    }
+  }
+  ```
+
+23. 
