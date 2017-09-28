@@ -1,5 +1,7 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Component, Inject } from "@angular/core";
+import { Validators, FormBuilder } from "@angular/forms";
+
+import { MediaItemService } from "./media-item-service";
 
 @Component({
   selector: 'media-item-form',
@@ -9,15 +11,21 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 export class MediaItemForm {
   form;
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private mediaItemService: MediaItemService,
+    @Inject('lookupListToken') public lookupList
+  ) {}
+
   ngOnInit() {
-    this.form = new FormGroup({
-      medium: new FormControl('Movies'),
-      name: new FormControl('', Validators.compose([
+    this.form = this.formBuilder.group({
+      medium: this.formBuilder.control('Movies'),
+      name: this.formBuilder.control('', Validators.compose([
         Validators.required,
         Validators.pattern('[\\w\\-\\s\\/]+')
       ])),
-      category: new FormControl(''),
-      year: new FormControl('', this.yearValidator),
+      category: this.formBuilder.control(''),
+      year: this.formBuilder.control('', this.yearValidator),
     });
   }
 
@@ -40,5 +48,6 @@ export class MediaItemForm {
 
   onSubmit(mediaItemFormValue) {
     console.log(mediaItemFormValue);
+    this.mediaItemService.add(mediaItemFormValue);
   }
 }

@@ -564,4 +564,55 @@ ngOnInit() {
   }
   ```
 
-23. 
+23. Class constructor injection
+  ```
+  constructor(private formBuilder: FormBuilder) {}
+
+    ngOnInit() {
+      this.form = this.formBuilder.group({
+        medium: this.formBuilder.control('Movies'),
+        name: this.formBuilder.control('', Validators.compose([
+          Validators.required,
+          Validators.pattern('[\\w\\-\\s\\/]+')
+        ])),
+        category: this.formBuilder.control(''),
+        year: this.formBuilder.control('', this.yearValidator),
+      });
+    }
+  ```
+
+24. Injection decorator
+- Usage: 
+```
+// 1. create content for injection
+const LookupList = {
+  mediums: ['Movies', 'Series']
+};
+
+// 2. register this injection in NgModule's Providers
+providers: [
+  MediaItemService,
+  { provide: 'lookupListToken', useValue: LookupList }
+],
+```
+
+```
+// 3. in component file import Inject
+import { Component, Inject } from "@angular/core";
+
+// 4. register this injection in Component
+constructor(
+  private formBuilder: FormBuilder,
+  private mediaItemService: MediaItemService,
+  @Inject('lookupListToken') public lookupList
+) {}
+```
+
+```
+// 5. in template file, use this injection
+<select name="medium" id="medium" formControlName="medium">
+  <option *ngFor="let medium of lookupList.mediums" value="{{medium}}">{{medium}}</option>
+</select>
+```
+
+25. 
