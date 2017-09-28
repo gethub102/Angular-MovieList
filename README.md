@@ -260,3 +260,104 @@ export class CategoryPipeList {
 </header>
 ```
 **Note:** pipe name should not contians **`-`**. Like **category-list** is prevented. It should be written like **categoryList**.
+
+17. Forms
+- Collect Data
+- Tracking Data
+- Validate Data
+- Show Errors
+- Angular Forms: is used to Bind data, bind events
+    * In/out change tracking
+    * In/out validaton
+        * Buid in validators
+        * Custom validators
+        * Aysnc validators
+        * Form object representation
+- Model-Driven Forms
+    * Template Driven
+    * Model Driven
+
+18. Template Driven Form
+```
+import { FavoriteDirective } from "./favorite.directive";
+import { CategoryPipeList } from "./pipe.category-list";
+import { MediaItemForm } from "./component.media-item-form";
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule
+  ],
+  declarations: [
+    AppComponent, MediaItemComponent, MediaItemList, 
+    FavoriteDirective,
+    CategoryPipeList,
+    MediaItemForm
+  ],
+  bootstrap: [
+    AppComponent
+  ]
+})
+export class AppModule {}
+```
+Create a component of form to be used as template.
+```
+<!-- template html file -->
+<form 
+#mediaItemForm = "ngForm"
+(ngSubmit)="onSubmit(mediaItemForm.value)">
+  <ul>
+    <li>
+      <label for="medium">Medium</label>
+      <select name="medium" id="medium" ngModel>
+        <option value="Movies">Movies</option>
+        <option value="Series">Series</option>
+      </select>
+    </li>
+    <li>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" ngModel>
+    </li>
+    <li>
+      <label for="category">Category</label>
+      <select name="category" id="category" ngModel>
+        <option value="Action">Action</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Drama">Drama</option>
+        <option value="Horror">Horror</option>
+        <option value="Romance">Romance</option>
+      </select>
+    </li>
+    <li>
+      <label for="year">Year</label>
+      <input type="text" name="year" id="year" maxlength="4" ngModel>
+    </li>
+  </ul>
+  <button type="submit">Save</button>
+</form>
+```
+`<form #mediaItemForm = "ngForm" (ngSubmit)="onSubmit(mediaItemForm.value)">`
+` <input type="text" name="name" id="name" ngModel>`is main code for bind form data.
+```
+<!-- Component ts file -->
+import { Component } from "@angular/core";
+
+@Component({
+  selector: 'media-item-form',
+  templateUrl: 'partials/media-item-form.html',
+  styleUrls: ['css/media-item-form.css']
+})
+export class MediaItemForm {
+  onSubmit(mediaItemFormValue) {
+    console.log(mediaItemFormValue);
+  }
+}
+```
+onSubmit() method is to show data object of form 
+
+19. Model-Driven Form
+- Form field contract
+- Field validation rules
+- Change tracking
+- Can be unit tested
