@@ -10,13 +10,15 @@ import { CategoryPipeList } from "./pipe.category-list";
 import { MediaItemForm } from "./component.media-item-form";
 import { MediaItemService } from "./media-item-service";
 import { lookupList, lookupListToken } from "./provider";
+import { routing } from "./app.routing";
 
 
 
 @NgModule({
   imports: [
     BrowserModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    routing
   ],
   declarations: [
     AppComponent, MediaItemComponent, MediaItemList, 
